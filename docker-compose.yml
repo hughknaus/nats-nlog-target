@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  natsstreamingserverinstaller:
+    image: ${DOCKER_REGISTRY-}natsstreamingserverinstaller
+    build:
+      context: .
+      dockerfile: NatsStreamingServerInstaller/Dockerfile
+
+  natsnlogconsumer:
+    image: ${DOCKER_REGISTRY-}natsnlogconsumer
+    build:
+      context: .
+      dockerfile: NatsNlogConsumer/Dockerfile
+
+
+  natsnlogexample:
+    image: ${DOCKER_REGISTRY-}natsnlogexample
+    build:
+      context: .
+      dockerfile: NatsNlogExample/Dockerfile
+

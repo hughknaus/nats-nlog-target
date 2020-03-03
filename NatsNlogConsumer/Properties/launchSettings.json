@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "NatsNlogConsumer": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

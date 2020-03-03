@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "NatsStreamingServerInstaller": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
