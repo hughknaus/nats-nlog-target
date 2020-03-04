@@ -14,6 +14,14 @@ RUN dotnet build "NatsStreamingServerInstaller.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "NatsStreamingServerInstaller.csproj" -c Release -o /app/publish
 
+FROM build AS clusterconf
+COPY ClusterConfigs/ ClusterConfigs/
+RUN ls -la ClusterConfigs/*
+
+FROM build AS faulttolerantconf
+COPY FaultTolerantConfigs/ FaultTolerantConfigs/
+RUN ls -la FaultTolerantConfigs/*
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .

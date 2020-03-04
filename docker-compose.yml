@@ -7,16 +7,16 @@ services:
       context: .
       dockerfile: NatsStreamingServerInstaller/Dockerfile
 
-  natsnlogconsumer:
-    image: ${DOCKER_REGISTRY-}natsnlogconsumer
-    build:
-      context: .
-      dockerfile: NatsNlogConsumer/Dockerfile
+  #natsnlogconsumer:
+  #  image: ${DOCKER_REGISTRY-}natsnlogconsumer
+  #  build:
+  #    context: .
+  #    dockerfile: NatsNlogConsumer/Dockerfile
 
 
-  natsnlogexample:
-    image: ${DOCKER_REGISTRY-}natsnlogexample
-    build:
-      context: .
-      dockerfile: NatsNlogExample/Dockerfile
+  #natsnlogexample:
+  #  image: ${DOCKER_REGISTRY-}natsnlogexample
+  #  build:
+  #    context: .
+  #    dockerfile: NatsNlogExample/Dockerfile
 

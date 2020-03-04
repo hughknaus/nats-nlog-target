@@ -1,7 +1,0 @@
-C:\_projects\NatsNlogExample\NatsNlogTargets\bin\Debug\netcoreapp3.1\NatsNlogTargets.deps.json
-C:\_projects\NatsNlogExample\NatsNlogTargets\bin\Debug\netcoreapp3.1\NatsNlogTargets.dll
-C:\_projects\NatsNlogExample\NatsNlogTargets\bin\Debug\netcoreapp3.1\NatsNlogTargets.pdb
-C:\_projects\NatsNlogExample\NatsNlogTargets\obj\Debug\netcoreapp3.1\NatsNlogTargets.AssemblyInfoInputs.cache
-C:\_projects\NatsNlogExample\NatsNlogTargets\obj\Debug\netcoreapp3.1\NatsNlogTargets.AssemblyInfo.cs
-C:\_projects\NatsNlogExample\NatsNlogTargets\obj\Debug\netcoreapp3.1\NatsNlogTargets.dll
-C:\_projects\NatsNlogExample\NatsNlogTargets\obj\Debug\netcoreapp3.1\NatsNlogTargets.pdb

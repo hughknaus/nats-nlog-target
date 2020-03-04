@@ -1,8 +1,0 @@
-C:\_projects\NLogNATSExample\Intermediator.NATS\bin\Debug\netcoreapp3.1\Intermediator.NATS.deps.json
-C:\_projects\NLogNATSExample\Intermediator.NATS\bin\Debug\netcoreapp3.1\Intermediator.NATS.dll
-C:\_projects\NLogNATSExample\Intermediator.NATS\bin\Debug\netcoreapp3.1\Intermediator.NATS.pdb
-C:\_projects\NLogNATSExample\Intermediator.NATS\obj\Debug\netcoreapp3.1\Intermediator.NATS.AssemblyInfoInputs.cache
-C:\_projects\NLogNATSExample\Intermediator.NATS\obj\Debug\netcoreapp3.1\Intermediator.NATS.AssemblyInfo.cs
-C:\_projects\NLogNATSExample\Intermediator.NATS\obj\Debug\netcoreapp3.1\Intermediator.NATS.dll
-C:\_projects\NLogNATSExample\Intermediator.NATS\obj\Debug\netcoreapp3.1\Intermediator.NATS.pdb
-C:\_projects\NLogNATSExample\Intermediator.NATS\obj\Debug\netcoreapp3.1\Intermediator.NATS.csprojAssemblyReference.cache

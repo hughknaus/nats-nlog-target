@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,96 +15,40 @@ namespace NatsStreamingServerInstaller
 
         public static void Main(string[] args)
         {
-            var exit = false;
-            var showHelp = true;
-            var auto = false;
-            var delete = false;
-            var cluster = false;
-            var faulttolerant = false;
-            var nodes = new List<string>();
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            IConfigurationRoot config = builder.Build();
+
+            var section = config.GetSection("mysettings");
+
+            var install = bool.Parse(section["install"]);
+            var uninstall = bool.Parse(section["uninstall"]);
+            var cluster = bool.Parse(section["cluster"]);
+            var faulttolerant = bool.Parse(section["faulttolerant"]);
             var validClusterNodes = new List<string>() { "node-A", "node-B", "node-C" };
             var validFaultTolerantNodes = new List<string>() { "node-A", "node-B" };
 
-            var p = new Options() {
-                { "a|auto", $"auto install nats-streaming-server cluster/fault tolerant.", v => auto = v != null },
-                { "d|delete=", $"uninstall one or more of the nats-streaming-server nodes.\n\t\t\t\t[[[{validClusterNodes[0]}],{validClusterNodes[1]}],{validClusterNodes[2]}]]", v => delete = v != null },
-                { "v|verbose", $"increase debug message verbosity", v => { if (v != null) ++verbosity; } },
-                { "h|help", $"show this message", v => showHelp = v != null },
-                { "x|exit", $"exit", v => exit = v != null },
-            };
-
-            while (exit == false) 
+            if (install) 
             {
-                IEnumerable<string> extra;
-
-                try
+                if (cluster) 
                 {
-                    extra = p.Parse(args);
+                    Console.WriteLine($"Auto node installation: {String.Join(",", validClusterNodes)}.");
+                    SetupClusterFoldersAndInstall(validClusterNodes);
                 }
-                catch (Exception e)
+                else if (faulttolerant) 
                 {
-                    Console.Write("natsinstaller: ");
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine("Try `natsinstaller --help' for more information.");
-                    return;
+                    Console.WriteLine($"Auto node installation: {String.Join(",", validFaultTolerantNodes)}.");
+                    SetupFaultTolerantFoldersAndInstall(validFaultTolerantNodes);
                 }
+            }
 
-                if (showHelp)
-                    ShowHelp(p);
-
-                if (auto && exit == false) 
-                {
-                    //ToDo: install auto
-
-                    if (cluster) 
-                    {
-                        Console.WriteLine($"Auto node installation: {String.Join(",", validClusterNodes)}.");
-                        SetupClusterFoldersAndInstall(validClusterNodes);
-                    }
-                    else if (faulttolerant) 
-                    {
-                        Console.WriteLine($"Auto node installation: {String.Join(",", validFaultTolerantNodes)}.");
-                        SetupFaultTolerantFoldersAndInstall(validFaultTolerantNodes);
-                    }
-
-                    Console.ReadKey();
-
-                    return;
-                }
-
-                if (delete && exit == false)
-                {
-                    Console.WriteLine($"Uninstalling node(s)...");
-                    UninstallNodes(validClusterNodes); //We'll just use the Cluster Nodes here because it can get them all (regardless of FT or Cluster)
-                    Console.WriteLine($"Uninstall complete.");
-                }
-
-                Console.WriteLine();
-                Console.WriteLine("Option: ");
-
-                switch (Console.ReadKey().Key)
-                {
-                    case ConsoleKey.A:
-                        auto = true;
-                        showHelp = false;
-
-                        Console.WriteLine();
-                        Console.WriteLine("Cluster (C) or Fault Tolerant (F):");
-                        var key = Console.ReadKey().Key;
-                        cluster = (key == ConsoleKey.C) ? true : false;
-                        faulttolerant = (key == ConsoleKey.F) ? true : false;
-                        break;
-                    case ConsoleKey.D:
-                        delete = true;
-                        showHelp = false;
-                        break;
-                    default:
-                        exit = true;
-                        showHelp = false;
-                        break;
-                }
-                
-                Console.WriteLine();
+            if (uninstall)
+            {
+                Console.WriteLine($"Uninstalling node(s)...");
+                UninstallNodes(validClusterNodes); //We'll just use the Cluster Nodes here because it can get them all (regardless of FT or Cluster)
+                Console.WriteLine($"Uninstall complete.");
             }
         }
 
@@ -136,18 +80,16 @@ namespace NatsStreamingServerInstaller
         {
             if (Directory.Exists(path) == true) 
             {
-                Console.WriteLine($"DELETE {path}, Are you sure? y/n");
-                var key = Console.ReadKey().Key;
+                Console.WriteLine($"Deleting {path}...");
 
-                if (key == ConsoleKey.Y)
-                    try
-                    {
-                        Directory.Delete(path, true);
-                    }
-                    catch(Exception ex)
-                    {
-                        Console.WriteLine($"Unable to delete. {ex.Message}");
-                    }
+                try
+                {
+                    Directory.Delete(path, true);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine($"Unable to delete. {ex.Message}");
+                }
 
                 Console.WriteLine();
             }
