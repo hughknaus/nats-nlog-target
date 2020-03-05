@@ -17,5 +17,8 @@ One of two configurations:
 			- Shared file data store
 		- HTTP server monitor (port: 8222)
 
-Also, create a docker-compose file of similar (but different) setup so that these can be ran containers.  
-The major difference here is that a Docker Swarm had to be created that enlists the nats-servers along with the nats-streaming-servers.
+Also, created a docker-compose file of similar (but different) setup so that these can be ran in containers.  
+The major difference here is that a Docker Swarm had to be created that enlists nats-servers along with the nats-streaming-servers.
+If you're going to use the Docker containers you'll need to ensure that you're using the correct settings for:
+  - NatsNlogConsumer > appsettings.json (see comments in file)
+  - NatsNlogExample > nlog.config (see comments in file)
