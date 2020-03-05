@@ -16,3 +16,6 @@ One of two configurations:
 			- HA listening ports: 6221, 6222
 			- Shared file data store
 		- HTTP server monitor (port: 8222)
+
+Also, create a docker-compose file of similar (but different) setup so that these can be ran containers.  
+The major difference here is that a Docker Swarm had to be created that enlists the nats-servers along with the nats-streaming-servers.

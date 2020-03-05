@@ -85,3 +85,15 @@ services:
     command: "-p 4222 -store file -dir /nats/shareddatastore-C -clustered -cluster_id swarm -cluster_node_id node-C -cluster_log_path /cluster/nats-cluster-node-C -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l ./logs/nats-node-C.log -DV"
     networks:
       - nats-streaming-example
+
+  natsnlogconsumer:
+    image: ${DOCKER_REGISTRY-}natsnlogconsumer
+    build:
+      context: .
+      dockerfile: NatsNlogConsumer/Dockerfile
+
+  natsnlogexample:
+    image: ${DOCKER_REGISTRY-}natsnlogexample
+    build:
+      context: .
+      dockerfile: NatsNlogExample/Dockerfile
