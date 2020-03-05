@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.json" />
     <None Remove="ClusterConfigs\nats-node-A\LICENSE" />
     <None Remove="ClusterConfigs\nats-node-A\nats-streaming-server.exe" />
     <None Remove="ClusterConfigs\nats-node-A\node-a.conf" />
@@ -30,6 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ClusterConfigs\nats-node-A\LICENSE">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

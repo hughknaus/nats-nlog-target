@@ -17,16 +17,17 @@ namespace NatsStreamingServerInstaller
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
             IConfigurationRoot config = builder.Build();
 
-            var section = config.GetSection("mysettings");
+            var setup = config.GetSection("setup");
+            var mode = setup.GetSection("mode");
 
-            var install = bool.Parse(section["install"]);
-            var uninstall = bool.Parse(section["uninstall"]);
-            var cluster = bool.Parse(section["cluster"]);
-            var faulttolerant = bool.Parse(section["faulttolerant"]);
+            var install = bool.Parse(setup["install"]);
+            var uninstall = bool.Parse(setup["uninstall"]);
+            var cluster = bool.Parse(mode["cluster"]);
+            var faulttolerant = bool.Parse(mode["faulttolerant"]);
             var validClusterNodes = new List<string>() { "node-A", "node-B", "node-C" };
             var validFaultTolerantNodes = new List<string>() { "node-A", "node-B" };
 
@@ -50,6 +51,10 @@ namespace NatsStreamingServerInstaller
                 UninstallNodes(validClusterNodes); //We'll just use the Cluster Nodes here because it can get them all (regardless of FT or Cluster)
                 Console.WriteLine($"Uninstall complete.");
             }
+
+            Console.WriteLine("Hit any key to exit...");
+            Console.ReadKey();
+            Environment.Exit(-1);
         }
 
         private static void ShowHelp(Options p)
@@ -182,7 +187,7 @@ namespace NatsStreamingServerInstaller
                 //var createCmd = $"create nats-{node} binPath= \"{Path.Combine(installPath, "nats-streaming-server.exe")} -p {listenPort} -store file -dir /nats/shareddatastore -ft_group \"test-group\" -cluster_node_id {clusterId} -cluster {cluster} -routes {routes} -l C:\\logs\\nats-{node}.log -DV\" start= auto";
                 var createCmd = $"create nats-{node} binPath= \"{Path.Combine(installPath, "nats-streaming-server.exe")} -config {Path.Combine(installPath, $"{node}.conf")} -l C:\\logs\\nats-{node}.log -DV\" start= auto";
 
-                Console.WriteLine($"Installing node \"{node}\"...");
+                Console.WriteLine($"Installing node \"nats-{node}\"...");
 
                 MakeDir(installPath);
                 Copy(sourcePath, installPath);
@@ -216,12 +221,12 @@ namespace NatsStreamingServerInstaller
                         if (!String.IsNullOrEmpty(args.Data))
                         {
                             errorsWritten = true;
-                            Console.Write($"InstallService.Proc.ErrorDataReceived() {args.Data}");
+                            Console.Write($"Proc.ErrorDataReceived() :: {args.Data} :: {proc.StartInfo.FileName} {processArgs}");
                         }
                     };
                     proc.Exited += (sender, args) =>
                     {
-                        Console.WriteLine("InstallService.Proc.Exited() successfully.");
+                        Console.WriteLine($"Proc.Exited() successfully :: {proc.StartInfo.FileName} {processArgs}");
                     };
 
                     proc.Start();
@@ -233,7 +238,7 @@ namespace NatsStreamingServerInstaller
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"InstallService EXCEPTION: {ex}");
+                    Console.WriteLine($"InstallService EXCEPTION: {ex} :: {proc.StartInfo.FileName} {processArgs} ::");
 
                     success = false;
                     proc.Kill();
