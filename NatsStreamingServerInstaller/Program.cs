@@ -57,24 +57,6 @@ namespace NatsStreamingServerInstaller
             Environment.Exit(-1);
         }
 
-        private static void ShowHelp(Options p)
-        {
-            Console.WriteLine("Usage: natsinstaller [OPTIONS]+");
-            Console.WriteLine("Install nats cluster or fault tolerant instances.");
-            Console.WriteLine();
-            Console.WriteLine("Options:");
-            p.WriteOptionDescriptions(Console.Out);
-        }
-
-        private static void Debug(string format, params object[] args)
-        {
-            if (verbosity > 0)
-            {
-                Console.Write("# ");
-                Console.WriteLine(format, args);
-            }
-        }
-
         private static void MakeDir(string path)
         {
             if (Directory.Exists(path) == false)
