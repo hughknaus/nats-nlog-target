@@ -1,22 +1,66 @@
 version: '3.4'
 
+#NEEDS WORK!
+
 services:
-  natsstreamingserverinstaller:
-    image: ${DOCKER_REGISTRY-}natsstreamingserverinstaller
-    build:
-      context: .
-      dockerfile: NatsStreamingServerInstaller/Dockerfile
+  nats-cluster-node-A:
+    image: nats:latest
+    restart: always
+    command: "-cluster nats://0.0.0.0:6222 -routes nats://nats-cluster-node-A:6222,nats://nats-cluster-node-B:6222,nats://nats-cluster-node-C:6222"
 
-  #natsnlogconsumer:
-  #  image: ${DOCKER_REGISTRY-}natsnlogconsumer
-  #  build:
-  #    context: .
-  #    dockerfile: NatsNlogConsumer/Dockerfile
+  nats-cluster-node-B:
+    image: nats:latest
+    restart: always
+    command: "-cluster nats://0.0.0.0:6222 -routes nats://nats-cluster-node-A:6222,nats://nats-cluster-node-B:6222,nats://nats-cluster-node-C:6222"
 
+  nats-cluster-node-C:
+    image: nats:latest
+    restart: always
+    command: "-cluster nats://0.0.0.0:6222 -routes nats://nats-cluster-node-A:6222,nats://nats-cluster-node-B:6222,nats://nats-cluster-node-C:6222"
 
-  #natsnlogexample:
-  #  image: ${DOCKER_REGISTRY-}natsnlogexample
-  #  build:
-  #    context: .
-  #    dockerfile: NatsNlogExample/Dockerfile
+  nats-streaming-node-A:
+    image: nats-streaming:latest
+    restart: always
+    expose:
+      - "4222"
+      - "8222"
+      - "6221"
+    ports:
+      - "4222"
+      - "8222"
+      - "6221:6221"
+    hostname: "nats-node-A"
+    volumes:
+      - "./logs:/logs"
+      - "./nats/shareddatastore-A:/nats/shareddatastore-A"
+    command: "-p 4222 -store file -dir /nats/shareddatastore-A -clustered -cluster_id swarm -cluster_node_id node-A -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l ./logs/nats-node-A.log -DV"
 
+  nats-streaming-node-B:
+    image: nats-streaming:latest
+    restart: always
+    expose:
+      - "4222"
+      - "6222"
+    ports:
+      - "4222"
+      - "6222:6222"
+    hostname: "nats-node-B"
+    volumes:
+      - "./logs:/logs"
+      - "./nats/shareddatastore-B:/nats/shareddatastore-B"
+    command: "-p 4222 -store file -dir /nats/shareddatastore-B -clustered -cluster_id swarm -cluster_node_id node-B -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l ./logs/nats-node-B.log -DV"
+
+  nats-streaming-node-C:
+    image: nats-streaming:latest
+    restart: always
+    expose:
+      - "4222"
+      - "6222"
+    ports:
+      - "4222"
+      - "6223:6223"
+    hostname: "nats-node-C"
+    volumes:
+      - "./logs:/logs"
+      - "./nats/shareddatastore-C:/nats/shareddatastore-C"
+    command: "-p 4222 -store file -dir /nats/shareddatastore-C -clustered -cluster_id swarm -cluster_node_id node-C -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l ./logs/nats-node-C.log -DV"
