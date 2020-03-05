@@ -12,6 +12,7 @@ This project creates a NATS target for NLog to stream log messages
   2. Run as Windows services:
     * NATS Streaming Server (binaries for v0.17.0-windows-386, includes license and README.md, ToDo: untilize package manager)
     * Clustered mode or Fault Tolerant mode
+  3. Also includes a consumer (console application)
 
 ###### Includes console application to provide a means for installing, configuring, and uninstalling NATS Streaming Server
   One of two configurations:
