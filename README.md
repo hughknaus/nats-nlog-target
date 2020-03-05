@@ -3,7 +3,7 @@
 
 This project creates a NATS target for NLog to stream log messages 
 
-![Image of NATS Brokered Throughput](https://github.com/hughknaus/nats-nlog-example/Assets/NATS_Brokered_Throughput.png)
+![Image of NATS Brokered Throughput](https://github.com/hughknaus/nats-nlog-example/blob/master/NATS_Brokered_Throughput.png)
 
 Read about NATS here: https://nats.io/about/
 
