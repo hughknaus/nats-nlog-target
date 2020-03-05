@@ -15,20 +15,20 @@ This project creates a NATS target for NLog to stream log messages
   3. Also includes a consumer (console application)
 
 ###### Includes console application to provide a means for installing, configuring, and uninstalling NATS Streaming Server
-  One of two configurations:
-    1. Cluster
-      * 3 instances (node-A, node-B, node-C)
-      * Runing on different local ports (ToDo: configurations for running on different machines)
-        * Client ports: 4221, 4222, 4223
-        * Cluster listening ports: 6221, 6222, 6223
-      * HTTP server monitor (port: 8222)
-    2. Fault Tolerant
-      * 2 instances (node-A, node-B)
-      * Runing on different local ports (ToDo: configurations for running on different machines)
-        * Client ports: 4221, 4222
-        * HA listening ports: 6221, 6222
-        * Shared file data store
-      * HTTP server monitor (port: 8222)
+One of two configurations:
+  1. Cluster
+    * 3 instances (node-A, node-B, node-C)
+    * Runing on different local ports (ToDo: configurations for running on different machines)
+      * Client ports: 4221, 4222, 4223
+      * Cluster listening ports: 6221, 6222, 6223
+    * HTTP server monitor (port: 8222)
+  2. Fault Tolerant
+    * 2 instances (node-A, node-B)
+    * Runing on different local ports (ToDo: configurations for running on different machines)
+      * Client ports: 4221, 4222
+      * HA listening ports: 6221, 6222
+      * Shared file data store
+    * HTTP server monitor (port: 8222)
 
 ###### Also, includes a docker-compose file of similar (but different) setup so that the above can be ran in containers. The major difference here is that a Docker Swarm was created that enlists NATS Servers along with the NATS Streaming Servers to provide communication amongst the cluster.
 If you're going to use the Docker containers you'll need to ensure that you're using the correct settings for:
