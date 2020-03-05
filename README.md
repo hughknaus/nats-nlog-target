@@ -11,8 +11,7 @@ Using:
 	Run using latest Docker Images:
 	  - Latest Docker Images for NATS Server and NATS Streaming Server
 	  - Docker Swarm (NATS in "cluster" mode)
-
-	Install as Windows services:
+	Run as Windows services:
 	  - NATS Streaming Server (binaries for v0.17.0-windows-386, includes license and README.md, ToDo: untilize package manager)
 	  - Clustered mode or Fault Tolerant mode
 
