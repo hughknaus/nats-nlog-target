@@ -5,8 +5,6 @@ This project creates a NATS target for NLog to stream log messages
 
 ![Image of NATS Brokered Throughput](https://github.com/hughknaus/nats-nlog-example/blob/master/NATS_Brokered_Throughput.png)
 
-Read about NATS here: https://nats.io/about/
-
 ######Using:
 	1. Run using latest Docker Images:
 		* Latest Docker Images for NATS Server and NATS Streaming Server
@@ -35,3 +33,5 @@ Read about NATS here: https://nats.io/about/
 If you're going to use the Docker containers you'll need to ensure that you're using the correct settings for:
   - NatsNlogConsumer > appsettings.json (see comments in file)
   - NatsNlogExample > nlog.config (see comments in file)
+
+Read about NATS here: https://nats.io/about/
