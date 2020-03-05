@@ -38,8 +38,8 @@ namespace NatsNlogExample
                             System.Threading.Thread.Sleep(5000);
                     }
 
-                    Console.WriteLine("Press ANY key to exit");
-                    Console.ReadKey();
+                    Console.WriteLine("Done...");
+                    Console.WriteLine("Shutting down...");
                     runner.ShutDown();
                 }
             }

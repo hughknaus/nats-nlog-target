@@ -1,7 +1,7 @@
 version: '3.4'
 
 #Creates a Docker swarm for nats-streaming-server:
-#REeference: https://docs.nats.io/nats-streaming-server/swarm
+#Reference: https://docs.nats.io/nats-streaming-server/swarm
 
 networks:
   nats-streaming-example:
@@ -46,7 +46,7 @@ services:
       - "./logs:/logs"
       - "./nats/shareddatastore-A:/nats/shareddatastore-A"
       - "./nats/cluster/nats-cluster-node-A:/cluster/nats-cluster-node-A"
-    command: "-p 4222 -store file -dir /nats/shareddatastore-A -clustered -cluster_id swarm -cluster_node_id node-A -cluster_log_path /cluster/nats-cluster-node-A -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l ./logs/nats-node-A.log -DV"
+    command: "-p 4222 -store file -dir /nats/shareddatastore-A -clustered -cluster_id test-cluster -cluster_node_id node-A -cluster_log_path /cluster/nats-cluster-node-A -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l ./logs/nats-node-A.log -DV"
     networks:
       - nats-streaming-example
 
@@ -64,7 +64,7 @@ services:
       - "./logs:/logs"
       - "./nats/shareddatastore-B:/nats/shareddatastore-B"
       - "./nats/cluster/nats-cluster-node-B:/cluster/nats-cluster-node-B"
-    command: "-p 4222 -store file -dir /nats/shareddatastore-B -clustered -cluster_id swarm -cluster_node_id node-B -cluster_log_path /cluster/nats-cluster-node-B -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l ./logs/nats-node-B.log -DV"
+    command: "-p 4222 -store file -dir /nats/shareddatastore-B -clustered -cluster_id test-cluster -cluster_node_id node-B -cluster_log_path /cluster/nats-cluster-node-B -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l ./logs/nats-node-B.log -DV"
     networks:
       - nats-streaming-example
 
@@ -82,18 +82,38 @@ services:
       - "./logs:/logs"
       - "./nats/shareddatastore-C:/nats/shareddatastore-C"
       - "./nats/cluster/nats-cluster-node-C:/cluster/nats-cluster-node-C"
-    command: "-p 4222 -store file -dir /nats/shareddatastore-C -clustered -cluster_id swarm -cluster_node_id node-C -cluster_log_path /cluster/nats-cluster-node-C -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l ./logs/nats-node-C.log -DV"
+    command: "-p 4222 -store file -dir /nats/shareddatastore-C -clustered -cluster_id test-cluster -cluster_node_id node-C -cluster_log_path /cluster/nats-cluster-node-C -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l ./logs/nats-node-C.log -DV"
     networks:
       - nats-streaming-example
 
   natsnlogconsumer:
     image: ${DOCKER_REGISTRY-}natsnlogconsumer
+    stdin_open: true
+    tty: true
     build:
       context: .
       dockerfile: NatsNlogConsumer/Dockerfile
+    ports:
+      - "4222"
+    volumes: 
+      - type: bind
+        source: "/c/logs"
+        target: "/c/logs"
+    networks:
+      - nats-streaming-example
 
   natsnlogexample:
     image: ${DOCKER_REGISTRY-}natsnlogexample
+    stdin_open: true
+    tty: true
     build:
       context: .
       dockerfile: NatsNlogExample/Dockerfile
+    ports:
+      - "4222"
+    volumes: 
+      - type: bind
+        source: "/c/logs"
+        target: "/c/logs"
+    networks:
+      - nats-streaming-example

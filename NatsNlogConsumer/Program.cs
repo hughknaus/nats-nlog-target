@@ -46,7 +46,8 @@ namespace NatsNlogConsumer
                 }, cts.Token);
 
                 Console.WriteLine("Hit any key to exit");
-                Console.ReadKey();
+                //Console.ReadKey();
+                Thread.Sleep(30000);
                 cts.Cancel();
             }
         }
