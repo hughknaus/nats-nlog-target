@@ -13,6 +13,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NatsStreamingServerInstalle
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{7B10B7A1-66FA-43EB-B76A-6C381FBAB94B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{0727BEE8-5C58-48D0-8D55-F289EFF59FDE}"
+	ProjectSection(SolutionItems) = preProject
+		NATS_Brokered_Throughput.png = NATS_Brokered_Throughput.png
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
