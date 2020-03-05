@@ -5,7 +5,7 @@ This project creates a NATS target for NLog to stream log messages
 
 ![Image of NATS Brokered Throughput](https://github.com/hughknaus/nats-nlog-example/blob/master/NATS_Brokered_Throughput.png)
 
-###### Using:
+### Using:
   1. Run using latest Docker Images:
     * Latest Docker Images for NATS Server and NATS Streaming Server
     * Docker Swarm (NATS in "cluster" mode)
@@ -14,7 +14,7 @@ This project creates a NATS target for NLog to stream log messages
     * Clustered mode or Fault Tolerant mode
   3. Also includes a consumer (console application)
 
-###### Includes console application to provide a means for installing, configuring, and uninstalling NATS Streaming Server
+### Includes console application to provide a means for installing, configuring, and uninstalling NATS Streaming Server
 One of two configurations:
   1. Cluster
     * 3 instances (node-A, node-B, node-C)
@@ -30,7 +30,7 @@ One of two configurations:
       * Shared file data store
     * HTTP server monitor (port: 8222)
 
-###### Also, includes a docker-compose file of similar (but different) setup so that the above can be ran in containers. The major difference here is that a Docker Swarm was created that enlists NATS Servers along with the NATS Streaming Servers to provide communication amongst the cluster.
+Also, includes a docker-compose file of similar (but different) setup so that the above can be ran in containers. The major difference here is that a Docker Swarm was created that enlists NATS Servers along with the NATS Streaming Servers to provide communication amongst the cluster.
 If you're going to use the Docker containers you'll need to ensure that you're using the correct settings for:
   * NatsNlogConsumer > appsettings.json (see comments in file)
   * NatsNlogExample > nlog.config (see comments in file)
