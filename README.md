@@ -1,9 +1,20 @@
 # NATS NLog Target
 **With .NET Core, NATS (server + streaming server), NLog, Docker**
 
-This project creates a NATS target for NLog to stream and distribute log messages through a lightweught, high performance messaging system.
+This solution creates a NATS target for NLog to stream and distribute log messages through NATS Streaming Server.  Why NATS?  NATS, , is a lightweught, high performance messaging system and offers an at most once quality of service.  Simply put, NATS is about publishing and listening for messages and easy to use for developers and operators.  Additionally, it is:
 
+  * Highly-Performant
+  * Always on and available
+  * Extremely lightweight
+  * At Most Once and At Least Once Delivery
+  * Support for Observable and Scalable Services and Event/Data Streams
+  * Client support for over 30 different programming languages
+  * Cloud Native, a CNCF project with Kubernetes and Prometheus integrations
+
+See the troughput comparison alongisde other messaging systems below
 ![Image of NATS Brokered Throughput](https://github.com/hughknaus/nats-nlog-example/blob/master/NATS_Brokered_Throughput.png)
+
+###### (Image sorce from:  https://nats.io/about/)
 
 ### Using:
 1. Run using latest Docker Images:
