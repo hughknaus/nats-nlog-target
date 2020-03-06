@@ -1,7 +1,7 @@
 # NATS NLog Target
 **With .NET Core, NATS (server + streaming server), NLog, Docker**
 
-This project creates a NATS target for NLog to stream log messages 
+This project creates a NATS target for NLog to stream and distribute log messages through a lightweught, high performance messaging system.
 
 ![Image of NATS Brokered Throughput](https://github.com/hughknaus/nats-nlog-example/blob/master/NATS_Brokered_Throughput.png)
 
