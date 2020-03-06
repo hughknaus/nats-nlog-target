@@ -25,6 +25,8 @@ See the troughput comparison alongisde other messaging systems below
   * Clustered mode or Fault Tolerant mode
 3. Also includes a consumer (console application)
 
+![Image of NATS Brokered Throughput](https://github.com/hughknaus/nats-nlog-example/blob/master/nats-nlog-example.png)
+
 ### Includes console application to provide a means for installing, configuring, and uninstalling NATS Streaming Server
 One of two configurations:
   1. Cluster
