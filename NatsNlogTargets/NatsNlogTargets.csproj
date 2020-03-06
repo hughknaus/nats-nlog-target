@@ -1,7 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>NatsNlogTargets</PackageId>
+    <Authors>Hugh Knaus</Authors>
+    <Company />
+    <Product>NATS NLog Targets</Product>
+    <Description>Nuget package containing NLog Target for NATS</Description>
+    <Copyright>2020</Copyright>
+    <PackageProjectUrl>https://github.com/hughknaus/nats-nlog-target</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/hughknaus/nats-nlog-target.git</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>nats nlog target messaging queue raft cluster fault tolerant</PackageTags>
+    <PackageReleaseNotes>All new</PackageReleaseNotes>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
