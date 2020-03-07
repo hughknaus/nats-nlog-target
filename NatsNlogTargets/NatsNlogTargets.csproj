@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -10,7 +10,7 @@
     <Description>Nuget package containing NLog Target for NATS</Description>
     <Copyright>2020</Copyright>
     <PackageProjectUrl>https://github.com/hughknaus/nats-nlog-target</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/hughknaus/nats-nlog-target.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/hughknaus/nats-nlog-target</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>nats nlog target messaging queue raft cluster fault tolerant</PackageTags>
     <PackageReleaseNotes>All new</PackageReleaseNotes>
