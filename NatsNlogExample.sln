@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{0727BE
 		nats-nlog-example.drawio = nats-nlog-example.drawio
 		nats-nlog-example.png = nats-nlog-example.png
 		NATS_Brokered_Throughput.png = NATS_Brokered_Throughput.png
+		nuget.config = nuget.config
 		README.md = README.md
 	EndProjectSection
 EndProject
