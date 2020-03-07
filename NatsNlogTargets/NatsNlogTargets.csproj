@@ -11,7 +11,7 @@
     <Copyright>2020</Copyright>
     <PackageProjectUrl>https://github.com/hughknaus/nats-nlog-target</PackageProjectUrl>
     <RepositoryUrl>https://github.com/hughknaus/nats-nlog-target</RepositoryUrl>
-    <RepositoryType>Git</RepositoryType>
+    <RepositoryType>git</RepositoryType>
     <PackageTags>nats nlog target messaging queue raft cluster fault tolerant</PackageTags>
     <PackageReleaseNotes>All new</PackageReleaseNotes>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
