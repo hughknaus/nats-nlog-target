@@ -46,27 +46,40 @@ namespace NatsNlogTargets
         [RequiredParameter]
         public Layout TenantName { get; set; }
 
-        [RequiredParameter]
-        public Layout NatsUrl { get; set; }
+        public string NatsUrl { get; set; }
 
-        [RequiredParameter]
-        public Layout NatsClusterId { get; set; }
+        public string NatsClusterId { get; set; }
 
-        [RequiredParameter]
-        public Layout NatsClientId { get; set; }
+        public string NatsClientId { get; set; }
 
-        [RequiredParameter]
-        public Layout NatsConnectionTimeout { get; set; }
+        public int NatsConnectionTimeout { get; set; }
 
-        [RequiredParameter]
-        public Layout NatsPubAckWait { get; set; }
+        public int NatsPubAckWait { get; set; }
 
         #endregion "Properties"
 
         #region "Ctor"
-        public NatsAsyncTarget()
+        public NatsAsyncTarget() : this(null, null, null)
+        {
+
+        }
+
+        public NatsAsyncTarget(string natsUrl, string natsClusterId, string natsClientId, int natsConnectionTimeout = 10000, int natsPubAckWait = 5000)
         {
             cache = new ConcurrentDictionary<string, IpObj>();
+            this.NatsUrl = natsUrl;
+            this.NatsClusterId = natsClusterId;
+            this.NatsClientId = natsClientId;
+            this.NatsConnectionTimeout = natsConnectionTimeout;
+            this.NatsPubAckWait = natsPubAckWait;
+
+            opts.NatsURL = this.NatsUrl;
+            opts.ConnectionLostEventHandler = (obj, args) =>
+            {
+                InternalLogger.Error($"NATS connection lost. {args.ConnectionException}");
+            };
+
+            stanConnection = Connect(this.NatsClusterId, this.NatsClientId, opts);
         }
         #endregion
 
@@ -76,12 +89,7 @@ namespace NatsNlogTargets
         protected override void CloseTarget()
         {
             base.CloseTarget();
-
-            if (stanConnection != null)
-            {
-                stanConnection.Close();
-                stanConnection.Dispose();
-            }
+            CloseAndDisposeStan();
         }
 
         /// <summary>
@@ -101,11 +109,6 @@ namespace NatsNlogTargets
             string machineName = base.RenderLogEvent(this.MachineName, logEvent);
             string tenantName = base.RenderLogEvent(this.TenantName, logEvent);
             string msg = base.RenderLogEvent(this.Layout, logEvent);
-            string natsurl = base.RenderLogEvent(this.NatsUrl, logEvent); //2 for FT, 3 for Cluster
-            string natsclusterid = base.RenderLogEvent(this.NatsClusterId, logEvent);
-            string natsclientid = base.RenderLogEvent(this.NatsClientId, logEvent);
-            string natsconnectiontimeout = base.RenderLogEvent(this.NatsConnectionTimeout, logEvent);
-            string natspubackwait = base.RenderLogEvent(this.NatsPubAckWait, logEvent);
 
             var json = JsonConvert.SerializeObject(new
             {
@@ -120,32 +123,19 @@ namespace NatsNlogTargets
             });
 
             try
-            {           
-                if (!String.IsNullOrEmpty(natsconnectiontimeout.Trim()))
-                    opts.ConnectTimeout = Int32.Parse(natsconnectiontimeout);
-
-                if (!String.IsNullOrEmpty(natspubackwait.Trim()))
-                    opts.PubAckWait = Int32.Parse(natspubackwait);
-
-                opts.NatsURL = natsurl;
-                opts.ConnectionLostEventHandler = (obj, args) =>
-                {
-                    InternalLogger.Error($"NATS connection lost. {args.ConnectionException}");
-                };
-
+            {                   
                 byte[] msgData = System.Text.Encoding.UTF8.GetBytes(json);
                 var pubTopic = System.Text.RegularExpressions.Regex.Replace(topic, @"\s", "");
 
-                using (var conn = Connect(natsclusterid, natsclientid, opts)) 
-                {
-                    var guid = await (conn.PublishAsync(pubTopic, msgData));
+                var conn = Connect(this.NatsClusterId, this.NatsClientId, opts);
+                var guid = await (conn.PublishAsync(pubTopic, msgData));
 
-                    if (verbose)
-                        InternalLogger.Info($"Published message with guid: {guid}");
-                }
+                if (verbose)
+                    InternalLogger.Info($"Published message with guid: {guid}");
             }
             catch (Exception ex)
             {
+                CloseAndDisposeStan();
                 InternalLogger.Error(ex, $"NATS publish error.");
             }
         }
@@ -154,6 +144,9 @@ namespace NatsNlogTargets
         {
             try
             {
+                if (String.IsNullOrEmpty(clusterId) || String.IsNullOrEmpty(clientId))
+                    return null;
+
                 if (stanConnection == null || stanConnection.NATSConnection == null) {
                     if (opts == null)
                         stanConnection = new StanConnectionFactory().CreateConnection(clusterId, clientId);
@@ -171,6 +164,15 @@ namespace NatsNlogTargets
             }
 
             return stanConnection;
+        }
+
+        private void CloseAndDisposeStan()
+        {
+            if (stanConnection != null)
+            {
+                stanConnection.Close();
+                stanConnection.Dispose();
+            }
         }
 
         private string GetCurrentIpFromCache()

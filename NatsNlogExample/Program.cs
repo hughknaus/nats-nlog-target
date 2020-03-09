@@ -10,16 +10,29 @@ namespace NatsNlogExample
 {
     internal static class Program
     {
+        private static IConfigurationSection natsconfig;
+        private static string natsUrl;
+        private static string natsClusterId;
+        private static string natsClientId;
+        private static int natsConnectionTimeout;
+        private static int natsPubAckWait;
+        private static NLog.ILogger logger;
+
         private static void Main()
         {
-            var logger = LogManager.GetCurrentClassLogger();
-
             try
             {
-                var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
+                var config = new ConfigurationBuilder()
                     .SetBasePath(System.IO.Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                     .Build();
 
+                natsconfig = config.GetSection("NatsConfig");
+                natsUrl = natsconfig["url"];
+                natsClusterId = natsconfig["clusterid"];
+                natsClientId = natsconfig["clientid"];
+                Int32.TryParse(natsconfig["connectiontimeout"], out natsConnectionTimeout);
+                Int32.TryParse(natsconfig["pubackwait"], out natsPubAckWait);
 
                 var servicesProvider = BuildDi(config);
 
@@ -58,7 +71,21 @@ namespace NatsNlogExample
 
         private static IServiceProvider BuildDi(IConfiguration config)
         {
-            return new ServiceCollection()
+            var nlogInstance = NLog.Config.ConfigurationItemFactory.Default.CreateInstance;
+            NLog.Config.ConfigurationItemFactory.Default.CreateInstance = type =>
+            {
+                if (type == typeof(NatsNlogTargets.NatsAsyncTarget))
+                {
+                    return new NatsNlogTargets.NatsAsyncTarget(natsUrl, natsClusterId, natsClientId, natsConnectionTimeout, natsPubAckWait);
+                }
+
+                return nlogInstance(type);
+            };
+
+            var servColl = new ServiceCollection()
+                .AddScoped<NatsNlogTargets.NatsAsyncTarget>(s => { 
+                    return new NatsNlogTargets.NatsAsyncTarget(natsUrl, natsClusterId, natsClientId, natsConnectionTimeout, natsPubAckWait);
+                })
                 .AddTransient<Runner>() // Runner is the custom class
                 .AddLogging(loggingBuilder =>
                 {
@@ -68,6 +95,8 @@ namespace NatsNlogExample
                     loggingBuilder.AddNLog(config);
                 })
                 .BuildServiceProvider();
+
+            return servColl;
         }
     }
 
