@@ -4,8 +4,8 @@ version: '3.4'
 #Reference: https://docs.nats.io/nats-streaming-server/swarm
 #Running for the first time? Run: docker swarm init
 # If you don't want to run in Docker containers:
-#   1) Change URLs in appsettings.json in NatsNlogConsumerExample & NatsNlogExample
-#   2) Change <ActiveDebugProfile>Docker</ActiveDebugProfile> in NatsNlogConsumerExample.csproj.user & NatsNlogExample.csproj.user to <ActiveDebugProfile>Debug</ActiveDebugProfile>
+#   1) Change URLs in appsettings.json in NatsNlogConsumerExample & NatsNlogPublisherExample
+#   2) Change <ActiveDebugProfile>Docker</ActiveDebugProfile> in NatsNlogConsumerExample.csproj.user & NatsNlogPublisherExample.csproj.user to <ActiveDebugProfile>Debug</ActiveDebugProfile>
 #   3) Use the NatsStreamServerInstaller project to setup/configure Windows services for NATS Streaming Server cluster
 
 networks:
@@ -134,18 +134,18 @@ services:
     networks:
       - nats-streaming-example
     depends_on:
-      - natsnlogexample
+      - natsnlogpublisherexample
       - ravendb-withdata
     environment:
       - "isdockercontainer=true"
 
-  natsnlogexample:
-    image: ${DOCKER_REGISTRY-}natsnlogexample
+  natsnlogpublisherexample:
+    image: ${DOCKER_REGISTRY-}natsnlogpublisherexample
     stdin_open: true
     tty: true
     build:
       context: .
-      dockerfile: NatsNlogExample/Dockerfile
+      dockerfile: NatsNlogPublisherExample/Dockerfile
     ports:
       - "4222"
     volumes: 

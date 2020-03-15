@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NatsNlogExample", "NatsNlogExample\NatsNlogExample.csproj", "{FFDD6A52-68F2-4C43-B449-3868C615F187}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NatsStreamingServerInstaller", "NatsStreamingServerInstaller\NatsStreamingServerInstaller.csproj", "{C8710BF0-9F05-46D7-A132-D7531CAEEC8B}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{7B10B7A1-66FA-43EB-B76A-6C381FBAB94B}"
@@ -22,16 +20,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NatsNlogTargets", "NatsNlog
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NatsNlogConsumerExample", "NatsNlogConsumerExample\NatsNlogConsumerExample.csproj", "{8AE29DFB-55D8-4B9F-8DE2-E41DFD73936C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NatsNlogPublisherExample", "NatsNlogPublisherExample\NatsNlogPublisherExample.csproj", "{064DE451-6035-44D7-89A5-1A0DBB5957DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FFDD6A52-68F2-4C43-B449-3868C615F187}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFDD6A52-68F2-4C43-B449-3868C615F187}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFDD6A52-68F2-4C43-B449-3868C615F187}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFDD6A52-68F2-4C43-B449-3868C615F187}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C8710BF0-9F05-46D7-A132-D7531CAEEC8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C8710BF0-9F05-46D7-A132-D7531CAEEC8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8710BF0-9F05-46D7-A132-D7531CAEEC8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,6 +44,10 @@ Global
 		{8AE29DFB-55D8-4B9F-8DE2-E41DFD73936C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AE29DFB-55D8-4B9F-8DE2-E41DFD73936C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AE29DFB-55D8-4B9F-8DE2-E41DFD73936C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{064DE451-6035-44D7-89A5-1A0DBB5957DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{064DE451-6035-44D7-89A5-1A0DBB5957DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{064DE451-6035-44D7-89A5-1A0DBB5957DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{064DE451-6035-44D7-89A5-1A0DBB5957DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

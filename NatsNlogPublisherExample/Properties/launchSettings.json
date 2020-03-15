@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "NatsNlogExample": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "commandLineArgs": "-it"
+    }
+  }
+}

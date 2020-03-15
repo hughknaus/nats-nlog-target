@@ -20,10 +20,15 @@ See the troughput comparison alongisde other messaging systems below
 1. Run using latest Docker Images:
   * Latest Docker Images for NATS Server and NATS Streaming Server
   * Docker Swarm (NATS in "cluster" mode)
-2. Run as Windows services:
+  * NatsNlogPublisherExample
+  * NatsNlogConsumerExample
+2. Run non-containerized:
   * NATS Streaming Server (binaries for v0.17.0-windows-386, includes license and README.md, ToDo: untilize package manager)
   * Clustered mode or Fault Tolerant mode
-3. Also includes a consumer (console application)
+  * NatsStreamingServerInstaller (setup NATS Streaming Server cluster)
+  * NatsNlogPublisherExample
+  * NatsNlogConsumerExample
+
 
 ![Image of NATS Brokered Throughput](https://github.com/hughknaus/nats-nlog-example/blob/master/nats-nlog-example.png)
 
@@ -45,7 +50,7 @@ One of two configurations:
 
 Also, includes a docker-compose file of similar (but different) setup so that the above can be ran in containers. The major difference here is that a Docker Swarm was created that enlists NATS Servers along with the NATS Streaming Servers to provide communication amongst the cluster.
 If you're going to use the Docker containers you'll need to ensure that you're using the correct settings for:
-  * NatsNlogConsumer > appsettings.json (see comments in file)
-  * NatsNlogExample > nlog.config (see comments in file)
+  * NatsNlogConsumerExample > appsettings.json (see comments in file)
+  * NatsNlogPublisherExample > nlog.config (see comments in file)
 
 Read about NATS here: https://nats.io/about/
