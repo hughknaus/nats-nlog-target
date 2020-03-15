@@ -33,24 +33,21 @@ See the troughput comparison alongisde other messaging systems below
 ![Image of NATS Brokered Throughput](https://github.com/hughknaus/nats-nlog-example/blob/master/nats-nlog-example.png)
 
 ### Includes console application to provide a means for installing, configuring, and uninstalling NATS Streaming Server
-One of two configurations:
-  1. Cluster
+One of three configurations:
+  1. NATS Streaming Server Cluster (non-containerized)
     * 3 instances (node-A, node-B, node-C)
     * Runing on different local ports (ToDo: configurations for running on different machines)
       * Client ports: 4221, 4222, 4223
       * Cluster listening ports: 6221, 6222, 6223
     * HTTP server monitor (port: 8222)
-  2. Fault Tolerant
+  2. NATS Streaming Server Fault Tolerant (non-containerized)
     * 2 instances (node-A, node-B)
     * Runing on different local ports (ToDo: configurations for running on different machines)
       * Client ports: 4221, 4222
       * HA listening ports: 6221, 6222
       * Shared file data store
     * HTTP server monitor (port: 8222)
-
-Also, includes a docker-compose file of similar (but different) setup so that the above can be ran in containers. The major difference here is that a Docker Swarm was created that enlists NATS Servers along with the NATS Streaming Servers to provide communication amongst the cluster.
-If you're going to use the Docker containers you'll need to ensure that you're using the correct settings for:
-  * NatsNlogConsumerExample > appsettings.json (see comments in file)
-  * NatsNlogPublisherExample > nlog.config (see comments in file)
+  3. NATS Server Cluster with NATS Stream Server Cluster (Docker Swarm)
+    * 6 Containers (node-cluster-A, node-cluster-B, node-cluster-C, node-streaming-A, node-streaming-B, node-streaming-C, )
 
 Read about NATS here: https://nats.io/about/
