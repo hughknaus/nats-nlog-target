@@ -10,6 +10,7 @@ namespace NatsNlogExample
 {
     internal static class Program
     {
+        private static readonly bool IN_DOCKER = Environment.GetEnvironmentVariable("isdockercontainer") == "true";
         private static IConfigurationSection natsconfig;
         private static string natsUrl;
         private static string natsClusterId;

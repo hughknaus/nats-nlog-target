@@ -2,6 +2,10 @@ version: '3.4'
 
 #Creates a Docker swarm for nats-streaming-server:
 #Reference: https://docs.nats.io/nats-streaming-server/swarm
+#Running for the first time? Run: docker swarm init
+# If you don't want to run in Docker containers:
+#   1) Change URLs in appsettings.json in NatsNlogConsumer & NatsNlogExample
+#   2) Change <ActiveDebugProfile>Docker</ActiveDebugProfile> in NatsNlogConsumer.csproj.user & NatsNlogExample.csproj.user to <ActiveDebugProfile>Debug</ActiveDebugProfile>
 
 networks:
   nats-streaming-example:
@@ -9,6 +13,21 @@ networks:
     driver: overlay
 
 services:
+  ravendb-withdata:
+    image: ravendb/ravendb
+    ports:
+      - "8080:8080"
+      - "38888:38888"
+    volumes:
+      - "/c/RavenDb/Config:/opt/RavenDB/config"
+      - "/c/RavenDb/Data:/opt/RavenDB/Server/RavenData"
+    environment:
+      #- "RAVEN_Setup_Mode=None"
+      - "RAVEN_ARGS=--Setup.Mode=None"
+      - "RAVEN_ARGS=--log-to-console"
+      - "RAVEN_License_Eula_Accepted=true"
+      - "RAVEN_Security_UnsecuredAccessAllowed=PrivateNetwork"
+
   nats-cluster-node-A:
     image: nats:latest
     restart: always
@@ -43,12 +62,16 @@ services:
       - "6221:6221"
     hostname: "nats-node-A"
     volumes:
-      - "./logs:/logs"
-      - "./nats/shareddatastore-A:/nats/shareddatastore-A"
-      - "./nats/cluster/nats-cluster-node-A:/cluster/nats-cluster-node-A"
-    command: "-p 4222 -store file -dir /nats/shareddatastore-A -clustered -cluster_id test-cluster -cluster_node_id node-A -cluster_log_path /cluster/nats-cluster-node-A -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l ./logs/nats-node-A.log -DV"
+      - "/c/logs:/logs"
+      - "/c/nats/shareddatastore-A:/nats/shareddatastore-A"
+      - "/c/nats/cluster/nats-cluster-node-A:/cluster/nats-cluster-node-A"
+    command: "-p 4222 -store file -dir /nats/shareddatastore-A -clustered -cluster_id test-cluster -cluster_node_id node-A -cluster_log_path /cluster/nats-cluster-node-A -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l /logs/nats-node-A.log -DV"
     networks:
       - nats-streaming-example
+    depends_on:
+      - nats-cluster-node-A
+      - nats-cluster-node-B
+      - nats-cluster-node-C
 
   nats-streaming-node-B:
     image: nats-streaming:latest
@@ -61,12 +84,16 @@ services:
       - "6222:6222"
     hostname: "nats-node-B"
     volumes:
-      - "./logs:/logs"
-      - "./nats/shareddatastore-B:/nats/shareddatastore-B"
-      - "./nats/cluster/nats-cluster-node-B:/cluster/nats-cluster-node-B"
-    command: "-p 4222 -store file -dir /nats/shareddatastore-B -clustered -cluster_id test-cluster -cluster_node_id node-B -cluster_log_path /cluster/nats-cluster-node-B -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l ./logs/nats-node-B.log -DV"
+      - "/c/logs:/logs"
+      - "/c/nats/shareddatastore-B:/nats/shareddatastore-B"
+      - "/c/nats/cluster/nats-cluster-node-B:/cluster/nats-cluster-node-B"
+    command: "-p 4222 -store file -dir /nats/shareddatastore-B -clustered -cluster_id test-cluster -cluster_node_id node-B -cluster_log_path /cluster/nats-cluster-node-B -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l /logs/nats-node-B.log -DV"
     networks:
       - nats-streaming-example
+    depends_on:
+      - nats-cluster-node-A
+      - nats-cluster-node-B
+      - nats-cluster-node-C
 
   nats-streaming-node-C:
     image: nats-streaming:latest
@@ -79,12 +106,16 @@ services:
       - "6223:6223"
     hostname: "nats-node-C"
     volumes:
-      - "./logs:/logs"
-      - "./nats/shareddatastore-C:/nats/shareddatastore-C"
-      - "./nats/cluster/nats-cluster-node-C:/cluster/nats-cluster-node-C"
-    command: "-p 4222 -store file -dir /nats/shareddatastore-C -clustered -cluster_id test-cluster -cluster_node_id node-C -cluster_log_path /cluster/nats-cluster-node-C -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l ./logs/nats-node-C.log -DV"
+      - "/c/logs:/logs"
+      - "/c/nats/shareddatastore-C:/nats/shareddatastore-C"
+      - "/c/nats/cluster/nats-cluster-node-C:/cluster/nats-cluster-node-C"
+    command: "-p 4222 -store file -dir /nats/shareddatastore-C -clustered -cluster_id test-cluster -cluster_node_id node-C -cluster_log_path /cluster/nats-cluster-node-C -cluster_peers node-A,node-B,node-C -nats_server nats://nats-cluster-node-A:4222,nats://nats-cluster-node-B:4222,nats://nats-cluster-node-C:4222 -l /logs/nats-node-C.log -DV"
     networks:
       - nats-streaming-example
+    depends_on:
+      - nats-cluster-node-A
+      - nats-cluster-node-B
+      - nats-cluster-node-C
 
   natsnlogconsumer:
     image: ${DOCKER_REGISTRY-}natsnlogconsumer
@@ -101,6 +132,11 @@ services:
         target: "/c/logs"
     networks:
       - nats-streaming-example
+    depends_on:
+      - natsnlogexample
+      - ravendb-withdata
+    environment:
+      - "isdockercontainer=true"
 
   natsnlogexample:
     image: ${DOCKER_REGISTRY-}natsnlogexample
@@ -117,3 +153,9 @@ services:
         target: "/c/logs"
     networks:
       - nats-streaming-example
+    depends_on:
+      - nats-streaming-node-A
+      - nats-streaming-node-B
+      - nats-streaming-node-C
+    environment:
+      - "isdockercontainer=true"

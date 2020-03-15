@@ -9,6 +9,7 @@ namespace NatsNlogConsumer
 {
     class Program
     {
+        private static readonly bool IN_DOCKER = Environment.GetEnvironmentVariable("isdockercontainer") == "true";
         private static IStanConnection stanConnection;
 
         public static void Main(string[] args)
@@ -34,43 +35,78 @@ namespace NatsNlogConsumer
                 Console.WriteLine($"NATS connection lost. {args.ConnectionException}");
             };
 
-            using (var conn = Connect(clusterId, clientid, opts))
+            try
             {
-                var cts = new CancellationTokenSource();
-
-                Task.Run(() =>
+                using (var conn = Connect(clusterId, clientid, opts))
                 {
-                    conn.Subscribe(topic, (obj, args) => {
-                        Console.WriteLine($"Received a message: {System.Text.Encoding.UTF8.GetString(args.Message.Data)}");
-                    });
-                }, cts.Token);
+                    var cts = new CancellationTokenSource();
 
-                Console.WriteLine("Hit any key to exit");
-                Console.ReadKey(); // If you don't run in a Docker container you could wait for the user to exit with any key
-                //Thread.Sleep(240000); // Only going to run this for 4min in the Docker container -- HEY! It's only an example!
-                cts.Cancel();
+                    Task.Run(() =>
+                    {
+                        conn.Subscribe(topic, (obj, args) =>
+                        {
+                            Console.WriteLine($"Received a message: {System.Text.Encoding.UTF8.GetString(args.Message.Data)}");
+                        });
+                    }, cts.Token);
+
+                    Console.WriteLine("Hit any key to exit");
+
+                    if (IN_DOCKER)
+                        Thread.Sleep(240000); // Only going to run this for 4min in the Docker container -- HEY! It's only an example!
+                    else
+                        Console.ReadKey(); // If you don't run in a Docker container you could wait for the user to exit with any key
+
+                    cts.Cancel();
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is StanConnectRequestTimeoutException || ex is StanConnectionException)
+                {
+                    Console.WriteLine($"Connection exception: {ex}");
+                    return;
+                }
+
+                Console.WriteLine($"Exception: {ex}");
             }
         }
 
         private static IStanConnection Connect(string clusterId, string clientId, StanOptions opts = null)
         {
-            try
+            int connectionRetryCounter = 0;
+            int connectionRetryMax = 3;
+            while (connectionRetryMax > 0 && stanConnection == null)
             {
-                if (stanConnection == null || stanConnection.NATSConnection == null)
+                try
                 {
-                    if (opts == null)
-                        stanConnection = new StanConnectionFactory().CreateConnection(clusterId, clientId);
-                    else
-                        stanConnection = new StanConnectionFactory().CreateConnection(clusterId, clientId, opts);
+                    if (stanConnection == null || stanConnection.NATSConnection == null)
+                    {
+                        if (opts == null)
+                            stanConnection = new StanConnectionFactory().CreateConnection(clusterId, clientId);
+                        else
+                            stanConnection = new StanConnectionFactory().CreateConnection(clusterId, clientId, opts);
+                    }
                 }
-            }
-            catch (STAN.Client.StanConnectionException ex)
-            {
-                Console.WriteLine($"NATS connection exception. {ex}");
-            }
-            catch (STAN.Client.StanConnectRequestTimeoutException ex)
-            {
-                Console.WriteLine($"NATS connection request timeout exception. {ex}");
+                catch (STAN.Client.StanConnectionException ex)
+                {
+                    connectionRetryMax--;
+                    Console.WriteLine($"NATS connection exception. {ex}");
+                    Thread.Sleep(1000 * connectionRetryCounter);
+                }
+                catch (STAN.Client.StanConnectRequestTimeoutException ex)
+                {
+                    connectionRetryMax--;
+                    Console.WriteLine($"NATS connection request timeout exception. {ex}");
+                    Thread.Sleep(1000 * connectionRetryCounter);
+                }
+                catch (STAN.Client.StanConnectRequestException ex)
+                {
+                    connectionRetryMax--;
+                    Console.WriteLine($"NATS connection request exception. {ex}");
+                    Thread.Sleep(1000 * connectionRetryCounter);
+                }
+
+                connectionRetryCounter++;
             }
 
             return stanConnection;
