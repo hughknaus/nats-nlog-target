@@ -49,12 +49,15 @@ namespace NatsNlogConsumer
                         });
                     }, cts.Token);
 
-                    Console.WriteLine("Hit any key to exit");
-
                     if (IN_DOCKER)
+                    {
                         Thread.Sleep(240000); // Only going to run this for 4min in the Docker container -- HEY! It's only an example!
+                    }
                     else
+                    {
+                        Console.WriteLine("Hit any key to exit");
                         Console.ReadKey(); // If you don't run in a Docker container you could wait for the user to exit with any key
+                    }
 
                     cts.Cancel();
                 }
