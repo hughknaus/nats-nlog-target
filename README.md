@@ -1,7 +1,7 @@
 # NATS NLog Target
 **With .NET Core, NATS (server + streaming server), NLog, Docker**
 
-This solution creates a NATS target for NLog to stream and distribute log messages through NATS Streaming Server.  Why NATS?  NATS, , is a lightweught, high performance messaging system and offers an at most once quality of service.  Simply put, NATS is about publishing and listening for messages and easy to use for developers and operators.  Additionally, it is:
+This solution creates a NATS target for NLog to stream and distribute log messages through NATS Streaming Server.  Why NATS?  NATS, is a lightweight, high performance messaging system and offers an at-most-once quality of service.  Simply put, NATS is about publishing and listening for messages and easy to use for developers and operators.  Additionally, it is:
 
   * Highly-Performant
   * Always on and available
